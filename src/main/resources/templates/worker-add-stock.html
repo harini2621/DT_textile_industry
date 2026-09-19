@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Add Stock | TRIZEN</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <i class="bi bi-boxes"></i>
+            <span>TRIZEN</span>
+        </div>
+
+        <ul>
+
+            <li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+
+            <li><a href="/worker-stock"><i class="bi bi-box-seam"></i> Stock</a></li>
+
+            <li><a href="/worker-add-stock" class="active"><i class="bi bi-plus-circle"></i> Add Stock</a></li>
+
+            <li><a href="/tasks"><i class="bi bi-list-task"></i> Tasks</a></li>
+
+            <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+
+            <li><a href="/login"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <div>
+
+                <h2>Add New Stock</h2>
+
+                <small>Add raw materials or finished products to inventory.</small>
+
+            </div>
+
+        </div>
+
+        <div class="glass-card p-4 mt-4">
+
+            <h4 class="mb-4">Stock Information</h4>
+
+            <form>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Stock Name</label>
+
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Enter stock name">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Category</label>
+
+                        <select class="form-select">
+                            <option selected>Select Category</option>
+                            <option>Raw Material</option>
+                            <option>Finished Product</option>
+                            <option>Accessories</option>
+                        </select>
+
+                    </div>
+                
+                    <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Add Stock | TRIZEN</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <i class="bi bi-boxes"></i>
+            <span>TRIZEN</span>
+        </div>
+
+        <ul>
+
+            <li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+
+            <li><a href="/worker-stock"><i class="bi bi-box-seam"></i> Stock</a></li>
+
+            <li><a href="/worker-add-stock" class="active"><i class="bi bi-plus-circle"></i> Add Stock</a></li>
+
+            <li><a href="/tasks"><i class="bi bi-list-task"></i> Tasks</a></li>
+
+            <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+
+            <li><a href="/login"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <div>
+
+                <h2>Add New Stock</h2>
+
+                <small>Add raw materials or finished products to inventory.</small>
+
+            </div>
+
+        </div>
+
+        <div class="glass-card p-4 mt-4">
+
+            <h4 class="mb-4">Stock Information</h4>
+
+            <form>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Stock Name</label>
+
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Enter stock name">
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <label class="form-label">Category</label>
+
+                        <select class="form-select">
+                            <option selected>Select Category</option>
+                            <option>Raw Material</option>
+                            <option>Finished Product</option>
+                            <option>Accessories</option>
+                        </select>
+
+                    </div>
+
+                                        <hr class="my-4">
+
+                    <div class="d-flex justify-content-end gap-3">
+
+                        <button type="reset"
+                                class="btn btn-outline-secondary rounded-pill px-4">
+
+                            <i class="bi bi-arrow-counterclockwise"></i>
+
+                            Reset
+
+                        </button>
+
+                        <a href="/worker-stock"
+                           class="btn btn-warning rounded-pill px-4">
+
+                            <i class="bi bi-x-circle"></i>
+
+                            Cancel
+
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-success rounded-pill px-5">
+
+                            <i class="bi bi-plus-circle-fill"></i>
+
+                            Add Stock
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+
+</html>

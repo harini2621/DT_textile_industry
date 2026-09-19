@@ -1,0 +1,32 @@
+body{
+    background:#f4f7fb;
+    font-family:Segoe UI, sans-serif;
+}
+
+.card{
+    border-radius:20px;
+}
+
+.table th{
+    text-align:center;
+}
+
+.table td{
+    vertical-align:middle;
+    text-align:center;
+}
+
+.btn-primary{
+    border-radius:12px;
+    padding:10px 22px;
+}
+
+.badge{
+    padding:8px 14px;
+    border-radius:10px;
+    font-size:14px;
+}
+
+h2{
+    font-weight:bold;
+}
