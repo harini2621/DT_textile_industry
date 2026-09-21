@@ -14,37 +14,34 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    // Save Task
     public Task saveTask(Task task) {
         return taskRepository.save(task);
     }
 
-    // Get All Tasks
     public List<Task> getAllTasks() {
         return taskRepository.findAll();
     }
 
-    // Get Task By ID
     public Optional<Task> getTaskById(Long id) {
         return taskRepository.findById(id);
     }
 
-    // Get Tasks By Status
     public List<Task> getTasksByStatus(String status) {
         return taskRepository.findByStatus(status);
     }
 
-    // Get Tasks By Department
     public List<Task> getTasksByDepartment(String department) {
         return taskRepository.findByDepartment(department);
     }
 
-    // Get Tasks By Assigned Worker
     public List<Task> getTasksByAssignedWorker(String assignedWorker) {
         return taskRepository.findByAssignedWorker(assignedWorker);
     }
 
-    // Delete Task
+    public List<Task> getTasksByAssignedWorkerAndStatus(String assignedWorker, String status) {
+        return taskRepository.findByAssignedWorkerAndStatus(assignedWorker, status);
+    }
+
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }

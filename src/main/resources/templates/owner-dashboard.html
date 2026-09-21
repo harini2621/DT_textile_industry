@@ -1,416 +1,223 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Owner Dashboard | TRIZEN</title>
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/style.css}">
-
 </head>
-
 <body>
-
 <div class="wrapper">
 
     <!-- Sidebar -->
-
     <aside class="sidebar">
-
         <div class="logo">
-
             <i class="bi bi-boxes"></i>
-
             <span>TRIZEN</span>
-
         </div>
-
         <ul>
-
+            <li><a href="/owner-dashboard" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+            <li><a href="/owner-search"><i class="bi bi-search"></i> Search Stock</a></li>
+            <li><a href="/owner-orders"><i class="bi bi-cart-check-fill"></i> Orders</a></li>
+            <li><a href="/workers"><i class="bi bi-people-fill"></i> Workers</a></li>
+            <li><a href="/reports"><i class="bi bi-bar-chart-fill"></i> Reports</a></li>
+            <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
             <li>
-                <a href="/owner-dashboard" class="active">
-                    <i class="bi bi-speedometer2"></i>
-                    Dashboard
-                </a>
+                <form th:action="@{/logout}" method="post" class="d-inline">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-link sidebar-logout">
+                        <i class="bi bi-box-arrow-right"></i> Logout
+                    </button>
+                </form>
             </li>
-
-            <li>
-                <a href="/owner-search">
-                    <i class="bi bi-search"></i>
-                    Search Stock
-                </a>
-            </li>
-
-            <li>
-                <a href="/owner-orders">
-                    <i class="bi bi-cart-check-fill"></i>
-                    Orders
-                </a>
-            </li>
-
-            <li>
-                <a href="/reports">
-                    <i class="bi bi-bar-chart-fill"></i>
-                    Reports
-                </a>
-            </li>
-
-            <li>
-                <a href="/profile">
-                    <i class="bi bi-person-circle"></i>
-                    Profile
-                </a>
-            </li>
-
-            <li>
-                <a href="/login">
-                    <i class="bi bi-box-arrow-right"></i>
-                    Logout
-                </a>
-            </li>
-
         </ul>
-
     </aside>
 
     <!-- Main Content -->
-
     <main class="main-content">
 
         <div class="topbar">
-
             <div>
-
                 <h2>Owner Dashboard</h2>
-
-                <small>Welcome back! Here's your business overview.</small>
-
+                <small>Welcome back, <strong th:text="${loggedUser != null ? loggedUser.fullName : 'Owner'}">Owner</strong>!</small>
             </div>
-
-            <button class="btn btn-primary rounded-pill">
-
-                <i class="bi bi-plus-circle-fill"></i>
-
-                Create Order
-
-            </button>
-
+            <a href="/create-order" class="btn btn-primary rounded-pill">
+                <i class="bi bi-plus-circle-fill"></i> Create Order
+            </a>
         </div>
 
-        <!-- Dashboard Cards -->
+        <!-- Flash Messages -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show mx-1" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i><span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
 
+        <!-- Stats Cards -->
         <div class="row g-4">
-
-            <div class="col-lg-3">
-
+            <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card">
-
                     <i class="bi bi-box-seam-fill icon blue"></i>
-
-                    <h3>4,820</h3>
-
-                    <p>Total Stock</p>
-
+                    <h3 th:text="${totalStock}">0</h3>
+                    <p>Total Stock (units)</p>
                 </div>
-
             </div>
-
-            <div class="col-lg-3">
-
+            <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card">
-
                     <i class="bi bi-cart-check-fill icon green"></i>
-
-                    <h3>1,284</h3>
-
+                    <h3 th:text="${totalOrders}">0</h3>
                     <p>Total Orders</p>
-
                 </div>
-
             </div>
-
-            <div class="col-lg-3">
-
+            <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card">
-
                     <i class="bi bi-people-fill icon warning"></i>
-
-                    <h3>145</h3>
-
+                    <h3 th:text="${totalWorkers}">0</h3>
                     <p>Workers</p>
-
                 </div>
-
             </div>
-
-            <div class="col-lg-3">
-
+            <div class="col-lg-3 col-md-6">
                 <div class="dashboard-card">
-
-                    <i class="bi bi-currency-rupee icon purple"></i>
-
-                    <h3>₹18.4L</h3>
-
-                    <p>Total Revenue</p>
-
+                    <i class="bi bi-hourglass-split icon purple"></i>
+                    <h3 th:text="${pendingOrders}">0</h3>
+                    <p>Pending Orders</p>
                 </div>
-
             </div>
-
         </div>
 
-                <!-- Analytics Section -->
-
-        <div class="row mt-5 g-4">
-
+        <!-- Analytics + Summary -->
+        <div class="row mt-4 g-4">
             <div class="col-lg-8">
-
                 <div class="glass-card p-4">
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-
-                        <h4>Revenue Analytics</h4>
-
-                        <span class="badge bg-primary">
-                            2026
-                        </span>
-
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Order Status Overview</h5>
+                        <span class="badge bg-primary">Live</span>
                     </div>
-
-                    <div class="chart-placeholder d-flex align-items-center justify-content-center">
-
-                        <div class="text-center">
-
-                            <i class="bi bi-bar-chart-line-fill display-1 text-primary"></i>
-
-                            <h5 class="mt-3">
-                                Monthly Revenue Chart
-                            </h5>
-
-                            <p class="text-muted">
-                                Integrate Chart.js or ApexCharts here.
-                            </p>
-
-                        </div>
-
-                    </div>
-
+                    <canvas id="orderChart" height="120"></canvas>
                 </div>
-
             </div>
-
             <div class="col-lg-4">
-
-                <div class="glass-card p-4">
-
-                    <h4 class="mb-4">
-                        Business Summary
-                    </h4>
-
-                    <div class="mb-4">
-                        <h6>Total Customers</h6>
-                        <h3 class="text-primary">864</h3>
+                <div class="glass-card p-4 h-100">
+                    <h5 class="fw-bold mb-4">Business Summary</h5>
+                    <div class="mb-3">
+                        <small class="text-muted">Total Orders</small>
+                        <h4 class="text-primary fw-bold" th:text="${totalOrders}">0</h4>
                     </div>
-
-                    <div class="mb-4">
-                        <h6>Pending Orders</h6>
-                        <h3 class="text-warning">38</h3>
+                    <div class="mb-3">
+                        <small class="text-muted">Pending Orders</small>
+                        <h4 class="text-warning fw-bold" th:text="${pendingOrders}">0</h4>
                     </div>
-
-                    <div class="mb-4">
-                        <h6>Completed Orders</h6>
-                        <h3 class="text-success">1,246</h3>
+                    <div class="mb-3">
+                        <small class="text-muted">Completed Orders</small>
+                        <h4 class="text-success fw-bold" th:text="${completedOrders}">0</h4>
                     </div>
-
                     <div>
-                        <h6>Production Efficiency</h6>
-                        <h3 class="text-info">98.6%</h3>
+                        <small class="text-muted">Total Workers</small>
+                        <h4 class="text-info fw-bold" th:text="${totalWorkers}">0</h4>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
 
         <!-- Recent Orders -->
-
-        <div class="glass-card p-4 mt-5">
-
-            <div class="d-flex justify-content-between align-items-center mb-4">
-
-                <h4>Recent Orders</h4>
-
-                <a href="/owner-orders"
-                   class="btn btn-outline-primary rounded-pill">
-
-                    View All
-
-                </a>
-
+        <div class="glass-card p-4 mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="fw-bold mb-0">Recent Orders</h5>
+                <a href="/owner-orders" class="btn btn-outline-primary btn-sm rounded-pill">View All</a>
             </div>
-
             <div class="table-responsive">
-
                 <table class="table table-hover align-middle">
-
-                    <thead>
-
+                    <thead class="table-light">
                         <tr>
-
-                            <th>Order ID</th>
-                            <th>Customer</th>
-                            <th>Amount</th>
+                            <th>#</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Worker</th>
+                            <th>Request Date</th>
                             <th>Status</th>
-
                         </tr>
-
                     </thead>
-
                     <tbody>
-
-                        <tr>
-
-                            <td>ORD-1001</td>
-                            <td>ABC Textiles</td>
-                            <td>₹2,50,000</td>
-
+                        <tr th:each="order : ${recentOrders}">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.productName}"></td>
+                            <td th:text="${order.quantity}"></td>
+                            <td th:text="${order.workerUsername != null ? order.workerUsername : '-'}"></td>
+                            <td th:text="${order.requestDate}"></td>
                             <td>
-                                <span class="badge bg-success">
-                                    Completed
-                                </span>
+                                <span th:classappend="${order.status == 'Completed'} ? 'bg-success' :
+                                                      (${order.status == 'PENDING'} ? 'bg-warning text-dark' :
+                                                      (${order.status == 'Rejected'} ? 'bg-danger' : 'bg-info'))"
+                                      class="badge" th:text="${order.status}"></span>
                             </td>
-
                         </tr>
-
-                        <tr>
-
-                            <td>ORD-1002</td>
-                            <td>Classic Mills</td>
-                            <td>₹1,80,000</td>
-
-                            <td>
-                                <span class="badge bg-warning text-dark">
-                                    Pending
-                                </span>
+                        <tr th:if="${#lists.isEmpty(recentOrders)}">
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="bi bi-inbox display-6 d-block mb-2"></i>No orders yet.
+                                <a href="/create-order" class="btn btn-primary btn-sm mt-2 rounded-pill">Create First Order</a>
                             </td>
-
                         </tr>
-
-                        <tr>
-
-                            <td>ORD-1003</td>
-                            <td>Elite Fabrics</td>
-                            <td>₹3,20,000</td>
-
-                            <td>
-                                <span class="badge bg-info">
-                                    Processing
-                                </span>
-                            </td>
-
-                        </tr>
-
                     </tbody>
-
                 </table>
-
             </div>
-
         </div>
 
-                <!-- Quick Action Cards -->
-
-        <div class="row mt-5 g-4">
-
+        <!-- Quick Actions -->
+        <div class="row mt-4 g-4">
             <div class="col-lg-4">
-
                 <div class="glass-card text-center p-4">
-
                     <i class="bi bi-box-seam display-4 text-primary"></i>
-
-                    <h5 class="mt-3">Inventory Status</h5>
-
-                    <p class="text-muted mb-3">
-                        Monitor stock availability and warehouse updates in real time.
-                    </p>
-
-                    <a href="/owner-search"
-                       class="btn btn-outline-primary rounded-pill">
-                        View Stock
-                    </a>
-
+                    <h5 class="mt-3">Search Inventory</h5>
+                    <p class="text-muted mb-3">Monitor stock availability in real time.</p>
+                    <a href="/owner-search" class="btn btn-outline-primary rounded-pill">View Stock</a>
                 </div>
-
             </div>
-
             <div class="col-lg-4">
-
                 <div class="glass-card text-center p-4">
-
                     <i class="bi bi-cart-check display-4 text-success"></i>
-
                     <h5 class="mt-3">Manage Orders</h5>
-
-                    <p class="text-muted mb-3">
-                        Review customer orders and monitor production progress.
-                    </p>
-
-                    <a href="/owner-orders"
-                       class="btn btn-outline-success rounded-pill">
-                        Open Orders
-                    </a>
-
+                    <p class="text-muted mb-3">Review and track all customer orders.</p>
+                    <a href="/owner-orders" class="btn btn-outline-success rounded-pill">Open Orders</a>
                 </div>
-
             </div>
-
             <div class="col-lg-4">
-
                 <div class="glass-card text-center p-4">
-
                     <i class="bi bi-bar-chart-line display-4 text-warning"></i>
-
                     <h5 class="mt-3">Business Reports</h5>
-
-                    <p class="text-muted mb-3">
-                        Analyze revenue, production and overall business performance.
-                    </p>
-
-                    <a href="/reports"
-                       class="btn btn-outline-warning rounded-pill">
-                        View Reports
-                    </a>
-
+                    <p class="text-muted mb-3">Analyze production and business performance.</p>
+                    <a href="/reports" class="btn btn-outline-warning rounded-pill">View Reports</a>
                 </div>
-
             </div>
-
         </div>
 
     </main>
-
 </div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    const pending   = [[${pendingOrders}]];
+    const completed = [[${completedOrders}]];
+    const total     = [[${totalOrders}]];
+    const other     = total - pending - completed;
 
-<!-- Custom JS -->
-<script th:src="@{/js/script.js}"></script>
-
+    new Chart(document.getElementById('orderChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Pending', 'Completed', 'Other'],
+            datasets: [{
+                data: [pending, completed, other < 0 ? 0 : other],
+                backgroundColor: ['#ffc107', '#198754', '#0dcaf0'],
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { position: 'bottom' } }
+        }
+    });
+</script>
 </body>
-
 </html>

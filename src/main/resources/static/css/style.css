@@ -980,5 +980,83 @@ body.dark-mode .topbar h2{
 }
 
 /* =======================
+   Login Page
+======================= */
+
+.login-page {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a, #0ea5e9);
+    min-height: 100vh;
+}
+
+.login-left-panel {
+    background: linear-gradient(160deg, #0f172a, #1e3a8a, #2563eb);
+}
+
+/* =======================
+   Sidebar Logout Button
+======================= */
+
+.sidebar-logout {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: #dbeafe;
+    padding: 14px 18px;
+    border-radius: 16px;
+    transition: var(--transition);
+    font-weight: 500;
+    font-size: 1rem;
+    width: 100%;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.sidebar-logout:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    transform: translateX(8px);
+}
+
+/* =======================
+   Chart Placeholder
+======================= */
+
+.chart-placeholder {
+    min-height: 200px;
+}
+
+/* =======================
+   Alert Improvements
+======================= */
+
+.alert {
+    border-radius: 14px;
+    border: none;
+    font-weight: 500;
+}
+
+/* =======================
+   Input Group
+======================= */
+
+.input-group-text {
+    background: #eff6ff;
+    border: 1px solid var(--border);
+    border-radius: 14px 0 0 14px;
+    color: var(--primary);
+}
+
+.input-group .form-control {
+    border-radius: 0 14px 14px 0;
+}
+
+.input-group .form-control:last-child {
+    border-radius: 0 14px 14px 0;
+}
+
+/* =======================
    End of File
 ======================= */
