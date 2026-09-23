@@ -24,6 +24,11 @@ public class WorkerService {
         return workerRepository.findAll();
     }
 
+    // Count Workers
+    public long countWorkers() {
+        return workerRepository.count();
+    }
+
     // Get Worker By ID
     public Optional<Worker> getWorkerById(Long id) {
         return workerRepository.findById(id);

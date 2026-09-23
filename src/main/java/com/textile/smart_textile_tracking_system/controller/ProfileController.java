@@ -1,6 +1,7 @@
 package com.textile.smart_textile_tracking_system.controller;
 
 import com.textile.smart_textile_tracking_system.entity.User;
+import com.textile.smart_textile_tracking_system.service.ActivityLogService;
 import com.textile.smart_textile_tracking_system.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +18,9 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ActivityLogService activityLogService;
 
     @GetMapping("/profile")
     public String profilePage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
@@ -48,8 +52,9 @@ public class ProfileController {
             return "redirect:/profile";
         }
 
-        if (newPassword.length() < 6) {
-            redirectAttributes.addFlashAttribute("error", "Password must be at least 6 characters.");
+        String strengthError = userService.validatePasswordStrength(newPassword);
+        if (strengthError != null) {
+            redirectAttributes.addFlashAttribute("error", strengthError);
             return "redirect:/profile";
         }
 
@@ -59,6 +64,8 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("error", "Current password is incorrect.");
         } else {
             redirectAttributes.addFlashAttribute("success", "Password changed successfully.");
+            activityLogService.log("PASSWORD_CHANGE", userDetails.getUsername(),
+                    "Password changed successfully");
         }
 
         return "redirect:/profile";

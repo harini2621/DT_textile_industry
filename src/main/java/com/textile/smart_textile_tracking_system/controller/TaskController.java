@@ -1,6 +1,7 @@
 package com.textile.smart_textile_tracking_system.controller;
 
 import com.textile.smart_textile_tracking_system.entity.Task;
+import com.textile.smart_textile_tracking_system.service.ActivityLogService;
 import com.textile.smart_textile_tracking_system.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +16,15 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @Autowired
+    private ActivityLogService activityLogService;
+
     @PostMapping
     public Task saveTask(@RequestBody Task task) {
-        return taskService.saveTask(task);
+        Task saved = taskService.saveTask(task);
+        activityLogService.log("TASK_ASSIGNMENT", task.getAssignedWorker(),
+                "Task '" + task.getTaskName() + "' assigned in " + task.getDepartment());
+        return saved;
     }
 
     @GetMapping

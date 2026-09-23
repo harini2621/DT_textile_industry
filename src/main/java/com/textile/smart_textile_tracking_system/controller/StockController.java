@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.List;
+
 @Controller
 public class StockController {
 
@@ -18,12 +20,17 @@ public class StockController {
 
     @GetMapping("/worker-stock")
     public String workerStockPage(@AuthenticationPrincipal UserDetails userDetails, Model model) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
         String username = userDetails.getUsername();
-        model.addAttribute("stocks", stockService.getWorkerStocks(username));
-        model.addAttribute("totalItems",    stockService.getWorkerStocks(username).size());
-        model.addAttribute("availableItems",stockService.getWorkerStocks(username).stream().filter(s -> s.getQuantity() > 10).count());
-        model.addAttribute("lowStockItems", stockService.getWorkerStocks(username).stream().filter(s -> s.getQuantity() > 0 && s.getQuantity() <= 10).count());
-        model.addAttribute("outOfStock",    stockService.getWorkerStocks(username).stream().filter(s -> s.getQuantity() == 0).count());
+        List<Stock> stocks = stockService.getWorkerStocks(username);
+
+        model.addAttribute("stocks", stocks);
+        model.addAttribute("totalItems",    stocks.size());
+        model.addAttribute("availableItems",stocks.stream().filter(s -> s.getQuantity() > 10).count());
+        model.addAttribute("lowStockItems", stocks.stream().filter(s -> s.getQuantity() > 0 && s.getQuantity() <= 10).count());
+        model.addAttribute("outOfStock",    stocks.stream().filter(s -> s.getQuantity() == 0).count());
         return "worker-stock";
     }
 
@@ -37,6 +44,17 @@ public class StockController {
     public String saveStock(@ModelAttribute Stock stock,
                             @AuthenticationPrincipal UserDetails userDetails,
                             RedirectAttributes redirectAttributes) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        if (stock == null || stock.getProductName() == null || stock.getProductName().isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Product name is required.");
+            return "redirect:/worker-add-stock";
+        }
+        if (stock.getQuantity() < 0) {
+            redirectAttributes.addFlashAttribute("error", "Quantity cannot be negative.");
+            return "redirect:/worker-add-stock";
+        }
         stock.setWorkerUsername(userDetails.getUsername());
         stockService.saveStock(stock);
         redirectAttributes.addFlashAttribute("success", "Stock added successfully.");
@@ -66,7 +84,17 @@ public class StockController {
     }
 
     @GetMapping("/delete-stock/{id}")
-    public String deleteStock(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String deleteStock(@PathVariable Long id,
+                              @AuthenticationPrincipal UserDetails userDetails,
+                              RedirectAttributes redirectAttributes) {
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+        Stock existing = stockService.getStock(id);
+        if (existing == null || !userDetails.getUsername().equals(existing.getWorkerUsername())) {
+            redirectAttributes.addFlashAttribute("error", "Stock not found or not owned by you.");
+            return "redirect:/worker-stock";
+        }
         stockService.deleteStock(id);
         redirectAttributes.addFlashAttribute("success", "Stock deleted successfully.");
         return "redirect:/worker-stock";

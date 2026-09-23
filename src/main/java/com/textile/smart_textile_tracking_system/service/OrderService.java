@@ -1,6 +1,7 @@
 package com.textile.smart_textile_tracking_system.service;
 
 import com.textile.smart_textile_tracking_system.entity.Order;
+import com.textile.smart_textile_tracking_system.entity.OrderStatus;
 import com.textile.smart_textile_tracking_system.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class OrderService {
     }
 
     public List<Order> getOrdersByStatus(String status) {
-        return orderRepository.findByStatus(status);
+        return orderRepository.findByStatusIgnoreCase(status);
     }
 
     public List<Order> getRecentOrders(int limit) {
@@ -47,10 +48,18 @@ public class OrderService {
         return all.size() > limit ? all.subList(0, limit) : all;
     }
 
+    public long countOrders() {
+        return orderRepository.count();
+    }
+
+    public long countOrdersByStatus(String status) {
+        return orderRepository.countByStatusIgnoreCase(status);
+    }
+
     public void acceptOrder(Long id) {
         Order order = getOrder(id);
         if (order != null) {
-            order.setStatus("Accepted");
+            order.setStatus(OrderStatus.ACCEPTED.getLabel());
             orderRepository.save(order);
         }
     }
@@ -58,7 +67,7 @@ public class OrderService {
     public void rejectOrder(Long id) {
         Order order = getOrder(id);
         if (order != null) {
-            order.setStatus("Rejected");
+            order.setStatus(OrderStatus.REJECTED.getLabel());
             orderRepository.save(order);
         }
     }
@@ -74,7 +83,7 @@ public class OrderService {
     public void completeOrder(Long id) {
         Order order = getOrder(id);
         if (order != null) {
-            order.setStatus("Completed");
+            order.setStatus(OrderStatus.COMPLETED.getLabel());
             orderRepository.save(order);
         }
     }

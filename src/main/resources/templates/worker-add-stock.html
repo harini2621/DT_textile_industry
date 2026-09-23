@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Add Stock | TRIZEN</title>
+    <title th:text="#{worker.add.page.title}">Add Stock | TRIZEN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -14,15 +14,15 @@
     <aside class="sidebar">
         <div class="logo"><i class="bi bi-boxes"></i><span>TRIZEN</span></div>
         <ul>
-            <li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
-            <li><a href="/worker-stock"><i class="bi bi-box-seam"></i> Stock</a></li>
-            <li><a href="/worker-add-stock" class="active"><i class="bi bi-plus-circle"></i> Add Stock</a></li>
-            <li><a href="/tasks"><i class="bi bi-list-task"></i> Tasks</a></li>
-            <li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>
+            <li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> <span th:text="#{nav.dashboard}">Dashboard</span></a></li>
+            <li><a href="/worker-stock"><i class="bi bi-box-seam"></i> <span th:text="#{nav.stock}">Stock</span></a></li>
+            <li><a href="/worker-add-stock" class="active"><i class="bi bi-plus-circle"></i> <span th:text="#{nav.add.stock}">Add Stock</span></a></li>
+            <li><a href="/tasks"><i class="bi bi-list-task"></i> <span th:text="#{nav.tasks}">Tasks</span></a></li>
+            <li><a href="/profile"><i class="bi bi-person-circle"></i> <span th:text="#{nav.profile}">Profile</span></a></li>
             <li>
                 <form th:action="@{/logout}" method="post" class="d-inline">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-link sidebar-logout"><i class="bi bi-box-arrow-right"></i> Logout</button>
+                    <button type="submit" class="btn btn-link sidebar-logout"><i class="bi bi-box-arrow-right"></i> <span th:text="#{nav.logout}">Logout</span></button>
                 </form>
             </li>
         </ul>
@@ -31,59 +31,68 @@
     <main class="main-content">
         <div class="topbar">
             <div>
-                <h2>Add New Stock</h2>
-                <small>Add raw materials or finished products to inventory.</small>
+                <h2 th:text="#{worker.add.page.title}">Add New Stock</h2>
+                <small th:text="#{worker.add.sub}">Add raw materials or finished products to inventory.</small>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill fw-semibold" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-translate me-1"></i><span th:text="${#locale.language == 'ta'} ? #{lang.ta} : #{lang.en}">English</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="?lang=en" th:text="#{lang.en}">English</a></li>
+                    <li><a class="dropdown-item" href="?lang=ta" th:text="#{lang.ta}">தமிழ்</a></li>
+                </ul>
             </div>
         </div>
 
         <div class="glass-card p-4 mt-4">
-            <h5 class="fw-bold mb-4">Stock Information</h5>
+            <h5 class="fw-bold mb-4" th:text="#{worker.add.info}">Stock Information</h5>
 
             <form th:action="@{/save-stock}" th:object="${stock}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Product Name</label>
+                        <label class="form-label fw-semibold" th:text="#{field.product.name}">Product Name</label>
                         <input type="text" class="form-control" th:field="*{productName}"
-                               placeholder="Enter product name" required>
+                               th:placeholder="#{addstock.product.ph}" placeholder="Enter product name" required>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Category</label>
+                        <label class="form-label fw-semibold" th:text="#{field.category}">Category</label>
                         <select class="form-select" th:field="*{category}" required>
-                            <option value="">Select Category</option>
-                            <option value="Raw Material">Raw Material</option>
-                            <option value="Finished Product">Finished Product</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Cotton">Cotton</option>
-                            <option value="Silk">Silk</option>
-                            <option value="Denim">Denim</option>
-                            <option value="Polyester">Polyester</option>
+                            <option value="" th:text="#{addstock.select.category}">Select Category</option>
+                            <option value="Raw Material" th:text="#{category.raw.material}">Raw Material</option>
+                            <option value="Finished Product" th:text="#{category.finished.product}">Finished Product</option>
+                            <option value="Accessories" th:text="#{category.accessories}">Accessories</option>
+                            <option value="Cotton" th:text="#{category.cotton}">Cotton</option>
+                            <option value="Silk" th:text="#{category.silk}">Silk</option>
+                            <option value="Denim" th:text="#{category.denim}">Denim</option>
+                            <option value="Polyester" th:text="#{category.polyester}">Polyester</option>
                         </select>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Quantity</label>
+                        <label class="form-label fw-semibold" th:text="#{field.qty}">Quantity</label>
                         <input type="number" class="form-control" th:field="*{quantity}"
-                               placeholder="Enter quantity" min="0" required>
+                               th:placeholder="#{addstock.qty.ph}" placeholder="Enter quantity" min="0" required>
                     </div>
 
                     <div class="col-md-6">
-                        <label class="form-label fw-semibold">Location / Warehouse</label>
+                        <label class="form-label fw-semibold" th:text="#{label.location.warehouse}">Location / Warehouse</label>
                         <input type="text" class="form-control" th:field="*{location}"
-                               placeholder="e.g. Warehouse A">
+                               th:placeholder="#{addstock.location.ph}" placeholder="e.g. Warehouse A">
                     </div>
 
                     <div class="col-12 d-flex justify-content-end gap-3 mt-2">
                         <button type="reset" class="btn btn-outline-secondary rounded-pill px-4">
-                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                            <i class="bi bi-arrow-counterclockwise"></i> <span th:text="#{common.reset}">Reset</span>
                         </button>
                         <a href="/worker-stock" class="btn btn-warning rounded-pill px-4">
-                            <i class="bi bi-x-circle"></i> Cancel
+                            <i class="bi bi-x-circle"></i> <span th:text="#{common.cancel}">Cancel</span>
                         </a>
                         <button type="submit" class="btn btn-success rounded-pill px-5">
-                            <i class="bi bi-plus-circle-fill"></i> Add Stock
+                            <i class="bi bi-plus-circle-fill"></i> <span th:text="#{common.add.stock}">Add Stock</span>
                         </button>
                     </div>
                 </div>

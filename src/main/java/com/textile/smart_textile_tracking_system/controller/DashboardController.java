@@ -1,10 +1,7 @@
 package com.textile.smart_textile_tracking_system.controller;
-
-import com.textile.smart_textile_tracking_system.service.OrderService;
-import com.textile.smart_textile_tracking_system.service.StockService;
-import com.textile.smart_textile_tracking_system.service.TaskService;
+import com.textile.smart_textile_tracking_system.dto.DashboardStats;
+import com.textile.smart_textile_tracking_system.service.DashboardService;
 import com.textile.smart_textile_tracking_system.service.UserService;
-import com.textile.smart_textile_tracking_system.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,16 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class DashboardController {
 
     @Autowired
-    private OrderService orderService;
-
-    @Autowired
-    private StockService stockService;
-
-    @Autowired
-    private WorkerService workerService;
-
-    @Autowired
-    private TaskService taskService;
+    private DashboardService dashboardService;
 
     @Autowired
     private UserService userService;
@@ -33,21 +21,23 @@ public class DashboardController {
     @GetMapping("/owner-dashboard")
     public String ownerDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
-        long totalOrders   = orderService.getAllOrders().size();
-        long pendingOrders = orderService.getOrdersByStatus("PENDING").size();
-        long completedOrders = orderService.getOrdersByStatus("Completed").size();
-        long totalStock    = stockService.getAllStocks().stream().mapToLong(s -> s.getQuantity()).sum();
-        long totalWorkers  = workerService.getAllWorkers().size();
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
 
-        model.addAttribute("totalOrders",    totalOrders);
-        model.addAttribute("pendingOrders",  pendingOrders);
-        model.addAttribute("completedOrders",completedOrders);
-        model.addAttribute("totalStock",     totalStock);
-        model.addAttribute("totalWorkers",   totalWorkers);
-        model.addAttribute("recentOrders",   orderService.getRecentOrders(5));
+        String username = userDetails.getUsername();
 
-        userService.getUserByUsername(userDetails.getUsername())
-                   .ifPresent(u -> model.addAttribute("loggedUser", u));
+        DashboardStats stats = dashboardService.getOwnerDashboardStats(username);
+
+        model.addAttribute("totalOrders", stats.getTotalOrders());
+        model.addAttribute("pendingOrders", stats.getPendingOrders());
+        model.addAttribute("inProgressOrders", stats.getInProgressOrders());
+        model.addAttribute("completedOrders", stats.getCompletedOrders());
+        model.addAttribute("totalStock", stats.getTotalStock());
+        model.addAttribute("totalWorkers", stats.getTotalWorkers());
+        model.addAttribute("recentOrders", stats.getRecentOrders());
+
+        addLoggedUser(model, username);
 
         return "owner-dashboard";
     }
@@ -55,22 +45,32 @@ public class DashboardController {
     @GetMapping("/worker-dashboard")
     public String workerDashboard(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
         String username = userDetails.getUsername();
 
-        long assignedTasks  = taskService.getTasksByAssignedWorker(username).size();
-        long completedTasks = taskService.getTasksByAssignedWorkerAndStatus(username, "Completed").size();
-        long pendingTasks   = taskService.getTasksByAssignedWorkerAndStatus(username, "Pending").size();
-        long myStockCount   = stockService.getWorkerStocks(username).stream().mapToLong(s -> s.getQuantity()).sum();
+        DashboardStats stats = dashboardService.getWorkerDashboardStats(username);
 
-        model.addAttribute("assignedTasks",  assignedTasks);
-        model.addAttribute("completedTasks", completedTasks);
-        model.addAttribute("pendingTasks",   pendingTasks);
-        model.addAttribute("myStockCount",   myStockCount);
-        model.addAttribute("myOrders",       orderService.getWorkerOrders(username));
+        model.addAttribute("assignedTasks", stats.getAssignedTasks());
+        model.addAttribute("completedTasks", stats.getCompletedTasks());
+        model.addAttribute("pendingTasks", stats.getPendingTasks());
+        model.addAttribute("myStockCount", stats.getMyStockCount());
+        model.addAttribute("myOrders", stats.getMyOrders());
 
-        userService.getUserByUsername(username)
-                   .ifPresent(u -> model.addAttribute("loggedUser", u));
+        addLoggedUser(model, username);
 
         return "worker-dashboard";
     }
+
+    /**
+     * Adds the currently logged-in user to the model so the dashboard layouts
+     * can greet them. Nothing is added when the username is unknown.
+     */
+    private void addLoggedUser(Model model, String username) {
+        userService.getUserByUsername(username)
+                   .ifPresent(user -> model.addAttribute("loggedUser", user));
+    }
 }
+

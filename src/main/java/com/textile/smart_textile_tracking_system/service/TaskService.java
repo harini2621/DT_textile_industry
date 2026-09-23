@@ -42,6 +42,23 @@ public class TaskService {
         return taskRepository.findByAssignedWorkerAndStatus(assignedWorker, status);
     }
 
+    // Dashboard counts: the database counts the rows instead of loading them.
+    public long countAllTasks() {
+        return taskRepository.count();
+    }
+
+    public long countTasksByStatus(String status) {
+        return taskRepository.countByStatus(status);
+    }
+
+    public long countTasksByAssignedWorker(String assignedWorker) {
+        return taskRepository.countByAssignedWorker(assignedWorker);
+    }
+
+    public long countTasksByAssignedWorkerAndStatus(String assignedWorker, String status) {
+        return taskRepository.countByAssignedWorkerAndStatus(assignedWorker, status);
+    }
+
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }

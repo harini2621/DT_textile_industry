@@ -24,6 +24,11 @@ public class ProductionOrderService {
         return productionOrderRepository.findAll();
     }
 
+    // Count Production Orders
+    public long countProductionOrders() {
+        return productionOrderRepository.count();
+    }
+
     // Get Production Order By ID
     public Optional<ProductionOrder> getProductionOrderById(Long id) {
         return productionOrderRepository.findById(id);

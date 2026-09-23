@@ -1,0 +1,10 @@
+const {load,save} = require('./lib');
+const F='owner-dashboard.html';
+let t = load(F);
+t = t.split('<div class="pulse-dot"></div>\n                        Live').join('<div class="pulse-dot"></div>\n                        <span th:text="#{admin.dashboard.live}">Live</span>');
+t = t.split('text-primary"></i>\n                            Total Orders').join('text-primary"></i>\n                            <span th:text="#{report.metric.totalOrders}">Total Orders</span>');
+t = t.split('text-success"></i>\n                            Completed Orders').join('text-success"></i>\n                            <span th:text="#{owner.card.completed.orders}">Completed Orders</span>');
+t = t.split('text-warning"></i>\n                            Pending Orders').join('text-warning"></i>\n                            <span th:text="#{owner.stat.pending.orders}">Pending Orders</span>');
+t = t.split('text-info"></i>\n                            Total Workers').join('text-info"></i>\n                            <span th:text="#{report.metric.totalWorkers}">Total Workers</span>');
+save(F,t);
+console.log('done multiline fixes');

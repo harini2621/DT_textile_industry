@@ -1,0 +1,9 @@
+const {R,load,save} = require('./lib');
+const F='worker-work-history.html';
+R(F,'<li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a></li>','<li><a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> <span th:text="#{nav.dashboard}">Dashboard</span></a></li>');
+R(F,'<li><a href="/worker/my-tasks"><i class="bi bi-list-check"></i> My Tasks</a></li>','<li><a href="/worker/my-tasks"><i class="bi bi-list-check"></i> <span th:text="#{nav.my.tasks}">My Tasks</span></a></li>');
+R(F,'<li><a href="/worker/work-history" class="active"><i class="bi bi-clock-history"></i> Work History</a>\n                </li>','<li><a href="?lang=en"><i class="bi bi-globe2"></i> <span th:text="#{lang.en}">English</span></a></li>\n                <li><a href="?lang=ta"><i class="bi bi-globe2"></i> <span th:text="#{lang.ta}">\u0ba4\u0bae\u0bbf\u0bb4\u0bcd</span></a></li>\n                <li><a href="/worker/work-history" class="active"><i class="bi bi-clock-history"></i> <span th:text="#{nav.work.history}">Work History</span></a></li>');
+R(F,'<li><a href="/worker/notifications"><i class="bi bi-bell-fill"></i> Notifications</a></li>','<li><a href="/worker/notifications"><i class="bi bi-bell-fill"></i> <span th:text="#{nav.notifications}">Notifications</span></a></li>');
+R(F,'<li><a href="/worker-stock"><i class="bi bi-box-seam"></i> Stock</a></li>','<li><a href="/worker-stock"><i class="bi bi-box-seam"></i> <span th:text="#{nav.stock}">Stock</span></a></li>');
+R(F,'<li><a href="/worker-orders"><i class="bi bi-cart-check-fill"></i> Orders</a></li>','<li><a href="/worker-orders"><i class="bi bi-cart-check-fill"></i> <span th:text="#{nav.orders}">Orders</span></a></li>');
+R(F,'<i class="bi bi-box-arrow-right"></i> Logout','<i class="bi bi-box-arrow-right"></i> <span th:text="#{nav.logout}">Logout</span>');

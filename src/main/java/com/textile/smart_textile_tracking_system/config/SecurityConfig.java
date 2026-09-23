@@ -48,12 +48,19 @@ public class SecurityConfig {
                                  "/reset-password", "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/owner-dashboard", "/owner-orders", "/owner-search",
                                  "/create-order", "/save-order", "/reports",
-                                 "/workers", "/search-stock").hasRole("OWNER")
+                                 "/workers", "/search-stock",
+                                 "/reports/export/**").hasRole("OWNER")
                 .requestMatchers("/worker-dashboard", "/worker-orders", "/worker-stock",
                                  "/worker-add-stock", "/save-stock", "/delete-stock/**",
-                                 "/tasks", "/production-orders",
-                                 "/worker/accept", "/worker/reject", "/worker/update-date",
-                                 "/worker/complete").hasRole("WORKER")
+                                 "/tasks", "/production-orders").hasRole("WORKER")
+                // Every worker module page/action lives under /worker (my-tasks, notifications,
+                // task status updates) and must stay worker-only.
+                .requestMatchers("/worker/**").hasRole("WORKER")
+                .requestMatchers("/owner/**").hasRole("OWNER")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                // The REST API manages workers, tasks, production orders and reports,
+                // so it is restricted to administrators instead of any logged-in user.
+                .requestMatchers("/api/**").hasRole("ADMIN")
                 .requestMatchers("/profile", "/update-profile", "/change-password").authenticated()
                 .anyRequest().authenticated()
             )
@@ -69,6 +76,8 @@ public class SecurityConfig {
                         response.sendRedirect("/owner-dashboard");
                     } else if ("ROLE_WORKER".equals(role)) {
                         response.sendRedirect("/worker-dashboard");
+                    } else if ("ROLE_ADMIN".equals(role)) {
+                        response.sendRedirect("/admin/dashboard");
                     } else {
                         response.sendRedirect("/");
                     }
@@ -76,11 +85,16 @@ public class SecurityConfig {
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
+            .rememberMe(remember -> remember
+                .key("trizen-remember-me-key")
+                .tokenValiditySeconds(14 * 24 * 60 * 60)
+                .userDetailsService(customUserDetailsService)
+            )
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
+                .deleteCookies("JSESSIONID", "remember-me")
                 .permitAll()
             )
             .sessionManagement(session -> session

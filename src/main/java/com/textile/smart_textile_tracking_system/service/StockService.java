@@ -39,6 +39,18 @@ public class StockService {
                 .findByProductNameContainingIgnoreCaseAndQuantityGreaterThan(productName, 0);
     }
 
+    // Total quantity of all stock, aggregated by the database instead of loading rows.
+    public long getTotalStockQuantity() {
+        Long total = stockRepository.sumQuantity();
+        return total == null ? 0L : total;
+    }
+
+    // Total quantity of stock held by one worker, aggregated by the database.
+    public long getWorkerStockQuantity(String workerUsername) {
+        Long total = stockRepository.sumQuantityByWorkerUsername(workerUsername);
+        return total == null ? 0L : total;
+    }
+
     // Delete Stock
     public void deleteStock(Long id) {
         stockRepository.deleteById(id);

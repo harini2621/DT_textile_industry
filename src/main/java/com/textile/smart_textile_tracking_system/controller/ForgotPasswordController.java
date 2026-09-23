@@ -25,13 +25,19 @@ public class ForgotPasswordController {
                                         @RequestParam String confirmPassword,
                                         Model model) {
 
+        if (email == null || email.isBlank()) {
+            model.addAttribute("error", "Please enter your registered email.");
+            return "forgot-password";
+        }
+
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match.");
             return "forgot-password";
         }
 
-        if (newPassword.length() < 6) {
-            model.addAttribute("error", "Password must be at least 6 characters.");
+        String strengthError = userService.validatePasswordStrength(newPassword);
+        if (strengthError != null) {
+            model.addAttribute("error", strengthError);
             return "forgot-password";
         }
 

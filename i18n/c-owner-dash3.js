@@ -1,0 +1,11 @@
+const {R} = require('./lib');
+const F='owner-dashboard.html';
+R(F,'<p>Total Workers</p>','<p th:text="#{owner.workers.total}">Total Workers</p>');
+R(F,'<h5 class="fw-bold mb-0"><i class="bi bi-pie-chart-fill me-2"></i> Order Status Overview</h5>','<h5 class="fw-bold mb-0"><i class="bi bi-pie-chart-fill me-2"></i> <span th:text="#{owner.card.status.overview}">Order Status Overview</span></h5>');
+R(F,'<div class="pulse-dot"></div> Live','<div class="pulse-dot"></div> <span th:text="#{admin.dashboard.live}">Live</span>');
+R(F,'<h5 class="fw-bold mb-0"><i class="bi bi-table me-2"></i> Business Summary</h5>','<h5 class="fw-bold mb-0"><i class="bi bi-table me-2"></i> <span th:text="#{owner.card.summary}">Business Summary</span></h5>');
+R(F,'<td><i class="bi bi-cart-check-fill me-2 text-primary"></i> Total Orders</td>','<td><i class="bi bi-cart-check-fill me-2 text-primary"></i> <span th:text="#{report.metric.totalOrders}">Total Orders</span></td>');
+R(F,'<td><i class="bi bi-check-circle-fill me-2 text-success"></i> Completed Orders</td>','<td><i class="bi bi-check-circle-fill me-2 text-success"></i> <span th:text="#{owner.card.completed.orders}">Completed Orders</span></td>');
+R(F,'<td><i class="bi bi-hourglass-split me-2 text-warning"></i> Pending Orders</td>','<td><i class="bi bi-hourglass-split me-2 text-warning"></i> <span th:text="#{owner.stat.pending.orders}">Pending Orders</span></td>');
+R(F,'<td><i class="bi bi-people-fill me-2 text-info"></i> Total Workers</td>','<td><i class="bi bi-people-fill me-2 text-info"></i> <span th:text="#{report.metric.totalWorkers}">Total Workers</span></td>');
+R(F,'View All</a>','<span th:text="#{admin.dashboard.viewAll}">View All</span></a>');

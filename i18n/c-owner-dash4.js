@@ -1,0 +1,10 @@
+const {R} = require('./lib');
+const F='owner-dashboard.html';
+R(F,'<small class="text-muted">Total Workers</small>','<small class="text-muted" th:text="#{report.metric.totalWorkers}">Total Workers</small>');
+R(F,'Order Status Overview</h5>','<span th:text="#{owner.card.status.overview}">Order Status Overview</span></h5>');
+R(F,'<div class="pulse-dot"></div> Live','<div class="pulse-dot"></div> <span th:text="#{admin.dashboard.live}">Live</span>');
+R(F,'Business Summary</h5>','<span th:text="#{owner.card.summary}">Business Summary</span></h5>');
+R(F,'</i> Total Orders</td>','</i> <span th:text="#{report.metric.totalOrders}">Total Orders</span></td>');
+R(F,'</i> Completed Orders</td>','</i> <span th:text="#{owner.card.completed.orders}">Completed Orders</span></td>');
+R(F,'</i> Pending Orders</td>','</i> <span th:text="#{owner.stat.pending.orders}">Pending Orders</span></td>');
+R(F,'</i> Total Workers</td>','</i> <span th:text="#{report.metric.totalWorkers}">Total Workers</span></td>');

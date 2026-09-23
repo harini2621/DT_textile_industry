@@ -25,6 +25,14 @@ public class ProductionOrder {
     @Column(nullable = false)
     private String deadline;
 
+    // Process stage tracking: Cutting -> Stitching -> Dyeing -> Finishing -> Packing -> Completed.
+    // Nullable so existing rows are unaffected.
+    @Column(name = "current_stage")
+    private String currentStage;
+
+    @Column(name = "assigned_worker")
+    private String assignedWorker;
+
     public ProductionOrder() {
     }
 
@@ -74,5 +82,21 @@ public class ProductionOrder {
 
     public void setDeadline(String deadline) {
         this.deadline = deadline;
+    }
+
+    public String getCurrentStage() {
+        return currentStage;
+    }
+
+    public void setCurrentStage(String currentStage) {
+        this.currentStage = currentStage;
+    }
+
+    public String getAssignedWorker() {
+        return assignedWorker;
+    }
+
+    public void setAssignedWorker(String assignedWorker) {
+        this.assignedWorker = assignedWorker;
     }
 }

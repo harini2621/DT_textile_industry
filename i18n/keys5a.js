@@ -1,0 +1,80 @@
+const {load,save} = require('./lib');
+const EN = '../messages.properties';
+const rows = [
+['admin.dashboard.page.title','Admin Dashboard'],
+['stat.total.users','Total Users'],
+['stat.total.owners','Total Owners'],
+['stat.total.workers','Total Workers'],
+['stat.pending.approvals','Pending Approvals'],
+['admin.system.overview','System Overview'],
+['admin.live','Live'],
+['admin.quick.summary','Quick Summary'],
+['admin.summary.production','Production Orders'],
+['admin.summary.tasks','Total Tasks'],
+['admin.summary.completed.tasks','Completed Tasks'],
+['admin.summary.logs','Activity Logs'],
+['admin.summary.unread','Unread Notifications'],
+['admin.recent.reg','Recent Registrations'],
+['admin.recent.reg.empty','No registrations yet.'],
+['admin.recent.activity','Recent Activity'],
+['admin.recent.activity.empty','No activity recorded yet.'],
+['admin.quick.users.desc','Review and approve pending registrations.'],
+['admin.quick.logs.desc','Audit important actions across the system.'],
+['admin.quick.notif.desc','View and manage system notifications.'],
+['admin.chart.pending','Pending Users'],
+['admin.chart.completed','Completed Tasks'],
+['admin.chart.count','Count'],
+['admin.dashboard.welcome','Welcome back,'],
+['nav.create.order','Create Order'],
+['createorder.product.ph','Enter product name'],
+['createorder.qty.ph','Enter quantity'],
+['createorder.worker.ph','Assign worker (optional)'],
+['createorder.remarks.ph','Remarks (optional)'],
+['nav.payments','Payments'],
+['addworker.name.ph','Full name'],
+['addworker.skill.ph','Skills, e.g. Cutting, Sewing'],
+['addworker.dept.ph','Department'],
+['addworker.phone.ph','Phone number'],
+['workers.availability.on.leave','On Leave'],
+['assign.batch','Batch'],
+['assign.product','Product'],
+['assign.qty','Quantity'],
+['assign.stage','Stage'],
+['assign.select.placeholder','Select a worker...'],
+['th.worker','Worker'],
+['payment.record.title','Record Payment'],
+['owner.pay.mark.paid.title','Mark as Paid'],
+['batch.orderno.ph','Order number'],
+['batch.product.ph','Product name'],
+['prod.total.batches','Total Batches'],
+['table.col.process.stage','Process Stage'],
+['table.col.assigned.worker','Assigned Worker'],
+['prod.select.placeholder','Filter by status...'],
+['search.product.ph','Search product...'],
+['worker.tasks.searchPlaceholder','Search tasks...'],
+['addstock.product.ph','Enter product name'],
+['addstock.select.category','Select Category'],
+['field.qty','Quantity'],
+['addstock.qty.ph','Enter quantity'],
+['addstock.location.ph','e.g. Warehouse A'],
+['dashboard.welcome.prefix','Welcome back,'],
+['payhistory.jobs','Completed Jobs'],
+['payhistory.total.qty','Total Quantity'],
+['payhistory.total.earned','Total Earned (Paid)'],
+['stock.search.ph','Search stock...'],
+['worker.history.page.title','Work History'],
+['common.completed','Completed'],
+['common.total','Total'],
+['worker.history.completed.work','Completed Work'],
+['worker.history.completed.status','Completed Status']
+];
+let t = load(EN);
+let n = 0;
+const lines = t.split('\n');
+for (const [k, v] of rows){
+  if (lines.some(l => l.trim().startsWith(k + '='))) { console.log('skip', k); continue; }
+  t = t.trimEnd() + '\n' + k + '=' + v + '\n';
+  n++;
+}
+save(EN, t);
+console.log('en appended', n);

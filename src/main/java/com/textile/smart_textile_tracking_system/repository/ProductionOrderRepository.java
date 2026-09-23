@@ -13,4 +13,8 @@ public interface ProductionOrderRepository extends JpaRepository<ProductionOrder
 
     List<ProductionOrder> findByProductName(String productName);
 
+    List<ProductionOrder> findByCurrentStage(String currentStage);
+
+    List<ProductionOrder> findByAssignedWorker(String assignedWorker);
+
 }

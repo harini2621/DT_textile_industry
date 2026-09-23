@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" th:lang="${#locale.language}" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Profile | TRIZEN</title>
+    <title th:text="#{profile.page.title}">My Profile | TRIZEN</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -16,16 +16,16 @@
         <ul>
             <!-- Dynamic sidebar based on role -->
             <li th:if="${user != null and user.role == 'OWNER'}">
-                <a href="/owner-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a href="/owner-dashboard"><i class="bi bi-speedometer2"></i> <span th:text="#{nav.dashboard}">Dashboard</span></a>
             </li>
             <li th:if="${user != null and user.role == 'WORKER'}">
-                <a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a href="/worker-dashboard"><i class="bi bi-speedometer2"></i> <span th:text="#{nav.dashboard}">Dashboard</span></a>
             </li>
-            <li><a href="/profile" class="active"><i class="bi bi-person-circle"></i> Profile</a></li>
+            <li><a href="/profile" class="active"><i class="bi bi-person-circle"></i> <span th:text="#{nav.profile}">Profile</span></a></li>
             <li>
                 <form th:action="@{/logout}" method="post" class="d-inline">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-link sidebar-logout"><i class="bi bi-box-arrow-right"></i> Logout</button>
+                    <button type="submit" class="btn btn-link sidebar-logout"><i class="bi bi-box-arrow-right"></i> <span th:text="#{nav.logout}">Logout</span></button>
                 </form>
             </li>
         </ul>
@@ -34,18 +34,27 @@
     <main class="main-content">
         <div class="topbar">
             <div>
-                <h2>My Profile</h2>
-                <small>Manage your account information and settings.</small>
+                <h2 th:text="#{profile.heading}">My Profile</h2>
+                <small th:text="#{profile.subtitle}">Manage your account information and settings.</small>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle rounded-pill fw-semibold" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-translate me-1"></i><span th:text="${#locale.language == 'ta'} ? #{lang.ta} : #{lang.en}">English</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="?lang=en" th:text="#{lang.en}">English</a></li>
+                    <li><a class="dropdown-item" href="?lang=ta" th:text="#{lang.ta}">தமிழ்</a></li>
+                </ul>
             </div>
         </div>
 
         <!-- Flash Messages -->
         <div th:if="${success}" class="alert alert-success alert-dismissible fade show mx-1">
-            <i class="bi bi-check-circle-fill me-2"></i><span th:text="${success}"></span>
+            <i class="bi bi-check-circle-fill me-2"></i><span th:text="${#messages.msgOrNull(success)} ?: ${success}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
         <div th:if="${error}" class="alert alert-danger alert-dismissible fade show mx-1">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${error}"></span>
+            <i class="bi bi-exclamation-triangle-fill me-2"></i><span th:text="${#messages.msgOrNull(error)} ?: ${error}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
 
@@ -56,36 +65,36 @@
                 <div class="glass-card p-4">
                     <div class="text-center mb-4">
                         <i class="bi bi-person-circle display-2 text-primary"></i>
-                        <h4 class="mt-2 fw-bold" th:text="${user != null ? user.fullName : 'User'}">User</h4>
-                        <span class="badge bg-primary px-3 py-2" th:text="${user != null ? user.role : ''}"></span>
+                        <h4 class="mt-2 fw-bold" th:text="${user != null ? user.fullName : #messages.msg('profile.defaultUser')}">User</h4>
+                        <span class="badge bg-primary px-3 py-2" th:text="${user != null ? (#messages.msgOrNull('role.' + #strings.toLowerCase(user.role)) ?: user.role) : ''}"></span>
                     </div>
 
                     <form th:action="@{/update-profile}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="row g-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Full Name</label>
+                                <label class="form-label fw-semibold" th:text="#{profile.fullName}">Full Name</label>
                                 <input type="text" class="form-control" name="fullName"
                                        th:value="${user != null ? user.fullName : ''}" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Email</label>
+                                <label class="form-label fw-semibold" th:text="#{profile.email}">Email</label>
                                 <input type="email" class="form-control" name="email"
                                        th:value="${user != null ? user.email : ''}" required>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Username</label>
+                                <label class="form-label fw-semibold" th:text="#{profile.username}">Username</label>
                                 <input type="text" class="form-control"
                                        th:value="${user != null ? user.username : ''}" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">Role</label>
+                                <label class="form-label fw-semibold" th:text="#{profile.role}">Role</label>
                                 <input type="text" class="form-control"
-                                       th:value="${user != null ? user.role : ''}" readonly>
+                                       th:value="${user != null ? (#messages.msgOrNull('role.' + #strings.toLowerCase(user.role)) ?: user.role) : ''}" readonly>
                             </div>
                             <div class="col-12 d-flex justify-content-end mt-2">
                                 <button type="submit" class="btn btn-primary rounded-pill px-5">
-                                    <i class="bi bi-check-circle-fill me-2"></i>Save Changes
+                                    <i class="bi bi-check-circle-fill me-2"></i><span th:text="#{profile.save}">Save Changes</span>
                                 </button>
                             </div>
                         </div>
@@ -96,27 +105,27 @@
             <!-- Change Password Card -->
             <div class="col-lg-4">
                 <div class="glass-card p-4">
-                    <h5 class="fw-bold mb-4"><i class="bi bi-key-fill text-warning me-2"></i>Change Password</h5>
+                    <h5 class="fw-bold mb-4"><i class="bi bi-key-fill text-warning me-2"></i><span th:text="#{profile.change.password}">Change Password</span></h5>
                     <form th:action="@{/change-password}" method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">Current Password</label>
+                            <label class="form-label fw-semibold" th:text="#{profile.current.password}">Current Password</label>
                             <input type="password" class="form-control" name="currentPassword"
-                                   placeholder="Enter current password" required>
+                                   th:placeholder="#{profile.current.password.ph}" placeholder="Enter current password" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold">New Password</label>
+                            <label class="form-label fw-semibold" th:text="#{profile.new.password}">New Password</label>
                             <input type="password" class="form-control" name="newPassword"
-                                   placeholder="Min 6 characters" required minlength="6">
+                                   th:placeholder="#{profile.new.password.ph}" placeholder="Min 6 characters" required minlength="6">
                         </div>
                         <div class="mb-4">
-                            <label class="form-label fw-semibold">Confirm Password</label>
+                            <label class="form-label fw-semibold" th:text="#{profile.confirm.password}">Confirm Password</label>
                             <input type="password" class="form-control" name="confirmPassword"
-                                   placeholder="Confirm new password" required minlength="6">
+                                   th:placeholder="#{profile.confirm.password.ph}" placeholder="Confirm new password" required minlength="6">
                         </div>
                         <div class="d-grid">
                             <button type="submit" class="btn btn-warning rounded-pill fw-semibold">
-                                <i class="bi bi-arrow-repeat me-2"></i>Change Password
+                                <i class="bi bi-arrow-repeat me-2"></i><span th:text="#{profile.change.password}">Change Password</span>
                             </button>
                         </div>
                     </form>

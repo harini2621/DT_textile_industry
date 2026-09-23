@@ -1,0 +1,18 @@
+const {R} = require('./lib');
+const F='owner-dashboard.html';
+R(F,'<html lang="en" xmlns:th=','<html lang="en" th:lang="${#locale.language}" xmlns:th=');
+R(F,'<title>Owner Dashboard | TRIZEN</title>','<title th:text="#{owner.dash2.title}">Owner Dashboard | TRIZEN</title>');
+R(F,'<li><a href="/owner-dashboard" class="active"><i class="bi bi-speedometer2"></i> Dashboard</a></li>','<li><a href="/owner-dashboard" class="active"><i class="bi bi-speedometer2"></i> <span th:text="#{nav.dashboard}">Dashboard</span></a></li>');
+R(F,'<li><a href="/owner-search"><i class="bi bi-search"></i> Search Stock</a></li>','<li><a href="/owner-search"><i class="bi bi-search"></i> <span th:text="#{nav.search.stock}">Search Stock</span></a></li>');
+R(F,'<li><a href="/owner-orders"><i class="bi bi-cart-check-fill"></i> Orders</a></li>','<li><a href="/owner-orders"><i class="bi bi-cart-check-fill"></i> <span th:text="#{nav.orders}">Orders</span></a></li>');
+R(F,'<li><a href="/workers"><i class="bi bi-people-fill"></i> Workers</a></li>','<li><a href="/workers"><i class="bi bi-people-fill"></i> <span th:text="#{nav.workers}">Workers</span></a></li>');
+R(F,'<li><a href="/reports"><i class="bi bi-bar-chart-fill"></i> Reports</a></li>','<li><a href="/reports"><i class="bi bi-bar-chart-fill"></i> <span th:text="#{nav.reports}">Reports</span></a></li>');
+R(F,'<li><a href="/profile"><i class="bi bi-person-circle"></i> Profile</a></li>','<li><a href="/profile"><i class="bi bi-person-circle"></i> <span th:text="#{nav.profile}">Profile</span></a></li>');
+R(F,'<i class="bi bi-box-arrow-right"></i> Logout','<i class="bi bi-box-arrow-right"></i> <span th:text="#{nav.logout}">Logout</span>');
+R(F,'<h2>Owner Dashboard</h2>','<h2 th:text="#{owner.dash2.title}">Owner Dashboard</h2>');
+R(F,'<small>Welcome back, <strong','<small><span th:text="#{owner.dash.welcome.prefix}">Welcome back,</span> <strong');
+R(F,'>Owner</strong>!</small>','>Owner</strong>!</small>');
+R(F,'<i class="bi bi-plus-circle-fill"></i> Create Order','<i class="bi bi-plus-circle-fill"></i> <span th:text="#{owner.dash.create.order}">Create Order</span>');
+R(F,'<p>Total Stock (units)</p>','<p th:text="#{owner.stat.total.stock}">Total Stock (units)</p>');
+R(F,'<p>Total Orders</p>','<p th:text="#{owner.stat.total.orders}">Total Orders</p>');
+R(F,'<h3 th:text="${totalWorkers}">0</h3>','<h3 th:text="${totalWorkers}">0</h3>');

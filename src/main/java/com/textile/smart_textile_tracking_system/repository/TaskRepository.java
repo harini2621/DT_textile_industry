@@ -16,4 +16,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByAssignedWorker(String assignedWorker);
 
     List<Task> findByAssignedWorkerAndStatus(String assignedWorker, String status);
+
+    // Dashboard counts: avoid loading every task row just to count them.
+    long countByStatus(String status);
+
+    long countByAssignedWorker(String assignedWorker);
+
+    long countByAssignedWorkerAndStatus(String assignedWorker, String status);
 }

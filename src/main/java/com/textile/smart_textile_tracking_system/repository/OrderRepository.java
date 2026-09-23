@@ -15,5 +15,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findByStatus(String status);
 
+    List<Order> findByStatusIgnoreCase(String status);
+
     List<Order> findAllByOrderByIdDesc();
+
+    // Dashboard count: avoids loading every order just to count them.
+    long countByStatusIgnoreCase(String status);
 }
