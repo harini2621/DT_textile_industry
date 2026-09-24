@@ -50,8 +50,9 @@ public class SecurityConfig {
                                  "/create-order", "/save-order", "/reports",
                                  "/workers", "/search-stock",
                                  "/reports/export/**").hasRole("OWNER")
-                .requestMatchers("/worker-dashboard", "/worker-orders", "/worker-stock",
-                                 "/worker-add-stock", "/save-stock", "/delete-stock/**",
+                // Worker role covers the remaining worker module pages; Stock was removed
+                // from the Worker module, so no stock routes are worker-accessible.
+                .requestMatchers("/worker-dashboard", "/worker-orders",
                                  "/tasks", "/production-orders").hasRole("WORKER")
                 // Every worker module page/action lives under /worker (my-tasks, notifications,
                 // task status updates) and must stay worker-only.
